@@ -1,11 +1,13 @@
 #include <iostream>
 #include <bitset>
 #define INFI 9000
+#define DESTINO 2
+#include "costo y anchura.cpp"
 //#define 
 
 using namespace std;
 
-typedef string tipodato;
+typedef long int tipodato;
 //--------------- Clase Nodo ---------------
 class Nodo{
     protected:
@@ -132,7 +134,7 @@ class Cola:public Lista{
       tipodato tope();
       bool colavacia(){this->esvacia();};
       void encolar(tipodato a) ;
-      void desencolar();
+      tipodato desencolar();
       tipodato ultimo();
       string imprimir(string s);
 };
@@ -145,8 +147,10 @@ void Cola::encolar(tipodato a){
 	this->add(a);
 }
 
-void Cola::desencolar(void){
+tipodato Cola::desencolar(void){
+	tipodato temp= ultimo();
 	this->borrar_last();
+	return temp;
 }
 
 tipodato Cola::ultimo(void){
@@ -205,6 +209,5 @@ int matrizCostos[MAX][MAX]={
 	 280,	 220,	 200,	 200,	 180,	 150,	INFI,	 780,
 	 600,	 590,	 700,	 500,	 800,	 240,	 780,	INFI
 };
-
 
 
