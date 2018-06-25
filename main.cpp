@@ -5,80 +5,52 @@
 
 using namespace std;
 
+typedef string tipodato;
+//--------------- Clase Nodo ---------------
 class Nodo{
     protected:
-        lista dato;
+        tipodato dato;
         Nodo *next;
     public:
         Nodo() {next=NULL;};
-        Nodo(lista a) {dato=a; next=NULL;};
-        void set_dato(lista a) {dato=a; };
+        Nodo(tipodato a) {dato=a; next=NULL;};
+        void set_dato(tipodato a) {dato=a; };
         void set_next(Nodo *n) {next=n; };
-        lista get_dato() {return dato; };
+        tipodato get_dato() {return dato; };
         Nodo *get_next() {return next; };
         bool es_vacio() {return next==NULL;}
 };
-
+//--------------- Clase Lista ---------------
 class Lista{
     protected: Nodo *czo;
     public:
             Lista() {czo=NULL;};
             Lista(Nodo *n) {czo=n;};
-            lista del();
-            void add(lista d);
+            tipodato del();
+            void add(tipodato d);
             bool esvacia();
             void borrar();
-            lista cabeza();
+            void borrar_last();
+            tipodato cabeza();
             Lista *resto();
             string toPrint(string p);
             void concat(Lista *l1);
-            int ver_last();
-            void set_valor(int a);
+            tipodato ver_last();
+            void set_valor(tipodato a);
+            
 
 };
-
-class Nodo{
-    protected:
-        lista dato;
-        Nodo *next;
-    public:
-        Nodo() {next=NULL;};
-        Nodo(lista a) {dato=a; next=NULL;};
-        void set_dato(lista a) {dato=a; };
-        void set_next(Nodo *n) {next=n; };
-        lista get_dato() {return dato; };
-        Nodo *get_next() {return next; };
-        bool es_vacio() {return next==NULL;}
-};
-
-class Lista{
-    protected: Nodo *czo;
-    public:
-            Lista() {czo=NULL;};
-            Lista(Nodo *n) {czo=n;};
-            lista del();
-            void add(lista d);
-            bool esvacia();
-            void borrar();
-            lista cabeza();
-            Lista *resto();
-            string toPrint(string p);
-            void concat(Lista *l1);
-            int ver_last();
-            void set_valor(int a);
-
-};
-
+//--------------- Metodos de Lista ---------------
 class Pila:public Lista{
     public:
 	    Pila(){Lista();};
-	    void apilar(lista x){add(x);};
-	    lista tope(){return cabeza();};
-	    lista desapilar(){return del();};
+	    void apilar(tipodato x){add(x);};
+	    tipodato tope(){return cabeza();};
+	    tipodato desapilar(){return del();};
 	    bool pilavacia(){return esvacia();};
 };
 
-lista Lista::del(void){
+tipodato Lista::del(void){
     Nodo *aux;
     aux=czo;
     czo=czo->get_next();
@@ -86,7 +58,7 @@ lista Lista::del(void){
 }
 
 
-void Lista::add(lista d){
+void Lista::add(tipodato d){
     Nodo *nuevo=new Nodo(d);
     nuevo->set_next(czo);
     czo=nuevo;
@@ -96,10 +68,10 @@ bool Lista::esvacia(void){
     return !czo;
 }
 
-lista Lista::cabeza(void){
+tipodato Lista::cabeza(void){
   if(esvacia()){
     cout<<" Error, Cabeza de lista vacia"<<endl;
-    return ' ';
+    return " ";
   }
   return czo->get_dato();
 }
@@ -127,7 +99,17 @@ void Lista::borrar(void)
   }
 }
 
-int Lista::ver_last(){ // ver el ultimo nodo
+void Lista::borrar_last(){
+   if(!this->esvacia()){
+      if((czo->get_next())->get_next()==NULL){
+         delete czo->get_next();
+         czo->set_next(NULL);
+      }
+      else this->resto()->borrar_last(); 
+   }
+}
+
+tipodato Lista::ver_last(){ // ver el ultimo nodo
    if(!this->esvacia()){
       if((czo->get_next())->get_next()==NULL){
 		czo->get_next();
@@ -137,10 +119,42 @@ int Lista::ver_last(){ // ver el ultimo nodo
    }
 }
 
-void Lista::set_valor(int a){
+void Lista::set_valor(tipodato a){
     Nodo *aux;
     aux = czo;
     aux->set_dato(a);
+}
+//--------------- Clase Cola ---------------
+class Cola:public Lista{
+  public:
+      Cola(void){Lista();};
+      ~Cola(void);
+      tipodato tope();
+      bool colavacia(){this->esvacia();};
+      void encolar(tipodato a) ;
+      void desencolar();
+      tipodato ultimo();
+      string imprimir(string s);
+};
+//--------------- Metodos de Cola ---------------
+tipodato Cola::tope(void){
+	return this->ver_last();
+}
+
+void Cola::encolar(tipodato a){
+	this->add(a);
+}
+
+void Cola::desencolar(void){
+	this->borrar_last();
+}
+
+tipodato Cola::ultimo(void){
+	return this->cabeza();
+}
+
+string Cola::imprimir(string s){
+	return this->toPrint(s);
 }
 
 void MultiLatina(Lista *M[MAX][MAX], Lista *MR[MAX][MAX]){
