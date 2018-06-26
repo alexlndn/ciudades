@@ -187,47 +187,29 @@ int matrizCostos[MAX][MAX]={
 	 600,	 590,	 700,	 500,	 800,	 240,	 780,	INFI
 };
 
-//void MultiplicacionLatina(){
-//	int M1[MAX][MAX],M2[MAX][MAX],MR[MAX][MAX]
-//	int a;
-//	for(i=0,i<MAX,i++)
-//		for(j=0,j<MAX,j++){
-//			if(matrizCostos[i][j]!=INFI){
-//				M1[i][j]=ij;
-//				M2[i][j]=j;
-//			}
-//			else{
-//				M1[i][j]=INFI;
-//				M2[i][j]=INFI;
-//			}
-//		}
-//	for(i=0,i<MAX,i++)
-//		for(j=0,j<MAX,j++){
-//			if(M1[j][i]!=INFI && M1[i][j]!=INFI){
-//				a=M1[j][i]
-//			}
-//}
-//void MultiLatina(Lista *M[MAX][MAX], Lista *MR[MAX][MAX]){
-//    for(int i=0;i<MAX;i++){
-//       for(int j=0;j<MAX;j++){
-//		    M[i][j]->add(matrizCostos[i][j]);
-//		    MR[i][j]->add(matrizCostos[i][j]);
-//		    if(M[i][j]->cabeza() !=  INFI && MR[i][j]->cabeza() != INFI){
-//		        MR[i][j]->concat(M[i][j]);
-//		    }else{
-//				MR[i][j]->set_valor(INFI);
-//			}
-//		    M1[i][j] = MR [i][j];
-//		    M1[i][j]->borrar();
-//		
-//		    if(MR[i][j]->cabeza() == M1[i][j]->ver_last()){
-//		         MR[i][j]->set_valor(INFI);
-//		    } else {
-//		        MR[i][j]->concat(M1[i][j]);
-//		    }
-//    	}
-//    }
-//}
+void MultiLatina(Lista *M[MAX][MAX], Lista *MR[MAX][MAX]){
+    for(int i=0;i<MAX;i++){
+       for(int j=0;j<MAX;j++){
+		    M[i][j]->add(matrizCostos[i][j]);
+		    MR[i][j]->add(matrizCostos[i][j]);
+		    
+		    if(M[i][j]->cabeza() !=  INFI && MR[i][j]->cabeza() != INFI){ //Si son valores validos, realiza la multiplicacio latina
+		      MR[i][j]->concat(M[i][j]);
+		    }else{														//Si al menos uno no es válido se setea el valor "infinito"
+					MR[i][j]->set_valor(INFI);
+				}
+				
+		    M1[i][j] = MR [i][j];
+		    M1[i][j]->borrar();
+		
+		    if(MR[i][j]->cabeza() == M1[i][j]->ver_last()){
+		         MR[i][j]->set_valor(INFI);
+		    } else {
+		        MR[i][j]->concat(M1[i][j]);
+		    }
+    	}
+    }
+}
 
 //void BEA(Lista *visitado, int peso[MAX][MAX], Cola *cola) {
 //	
