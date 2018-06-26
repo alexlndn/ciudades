@@ -176,15 +176,42 @@ tipodato Cola::ultimo(void){
 	return this->cabeza();
 }
 
-//string Cola::imprimir(string s){
-//	return this->toPrint(s);
-//}
+int matrizCostos[MAX][MAX]={
+	INFI,	 150,	 180,	 210,	 340,	 310,	 280,	 600,
+	 150,	INFI,	 220,	 200,	 350,	 290,	 220,	 590,
+	 180,	 220,	INFI,	 350,	 440,	 240,	 200,	 700,
+	 210,	 200,	 350,	INFI,	  95,    180,	 200,	 500,
+	 340,	 350,	 440,	 95,	INFI,	 300,	 180,	 800,
+	 310,	 290,	 240,	 180,	 300,	INFI,	 150,	 240,
+	 280,	 220,	 200,	 200,	 180,	 150,	INFI,	 780,
+	 600,	 590,	 700,	 500,	 800,	 240,	 780,	INFI
+};
 
+//void MultiplicacionLatina(){
+//	int M1[MAX][MAX],M2[MAX][MAX],MR[MAX][MAX]
+//	int a;
+//	for(i=0,i<MAX,i++)
+//		for(j=0,j<MAX,j++){
+//			if(matrizCostos[i][j]!=INFI){
+//				M1[i][j]=ij;
+//				M2[i][j]=j;
+//			}
+//			else{
+//				M1[i][j]=INFI;
+//				M2[i][j]=INFI;
+//			}
+//		}
+//	for(i=0,i<MAX,i++)
+//		for(j=0,j<MAX,j++){
+//			if(M1[j][i]!=INFI && M1[i][j]!=INFI){
+//				a=M1[j][i]
+//			}
+//}
 //void MultiLatina(Lista *M[MAX][MAX], Lista *MR[MAX][MAX]){
 //    for(int i=0;i<MAX;i++){
 //       for(int j=0;j<MAX;j++){
-//		    M[i][j]->add(MatrizAdy[i][j]);
-//		    MR[i][j]->add(MatrizAdy[i][j]);
+//		    M[i][j]->add(matrizCostos[i][j]);
+//		    MR[i][j]->add(matrizCostos[i][j]);
 //		    if(M[i][j]->cabeza() !=  INFI && MR[i][j]->cabeza() != INFI){
 //		        MR[i][j]->concat(M[i][j]);
 //		    }else{
@@ -217,17 +244,6 @@ tipodato Cola::ultimo(void){
 //		BEA(visitado,peso,cola);
 //	}
 //}
-
-int matrizCostos[MAX][MAX]={
-	INFI,	 150,	 180,	 210,	 340,	 310,	 280,	 600,
-	 150,	INFI,	 220,	 200,	 350,	 290,	 220,	 590,
-	 180,	 220,	INFI,	 350,	 440,	 240,	 200,	 700,
-	 210,	 200,	 350,	INFI,	  95,    180,	 200,	 500,
-	 340,	 350,	 440,	 95,	INFI,	 300,	 180,	 800,
-	 310,	 290,	 240,	 180,	 300,	INFI,	 150,	 240,
-	 280,	 220,	 200,	 200,	 180,	 150,	INFI,	 780,
-	 600,	 590,	 700,	 500,	 800,	 240,	 780,	INFI
-};
 
 int costo(int matrizCostos[][MAX], int* cam, int tamano){
     int cost = 0;
@@ -292,6 +308,7 @@ void anchura(bitset<MAX> visitados, int* cam, int matrizCostos[][MAX], int refer
 
 
 int main(){
+	Lista *M1[MAX][MAX], *MR[MAX][MAX], *M[MAX][MAX];
 	int *pdist, i, j, precede[MAX],s,t, posi[MAX];
 	bitset<MAX> visitados;
 	
