@@ -309,7 +309,6 @@ void anchura(bitset<MAX> visitados, int* cam, int matrizCostos[][MAX], int refer
 
 int main(){
 	Lista *M1[MAX][MAX], *MR[MAX][MAX], *M[MAX][MAX];
-	int *pdist, i, j, precede[MAX],s,t, posi[MAX];
 	bitset<MAX> visitados;
 	
 	int cam[MAX+1];
@@ -341,8 +340,7 @@ int main(){
                 }
                 cout<<endl;
     cout<<"El costo del camino es: "<<costo(matrizCostos,optimo, largo)<<endl;
-    cout<<endl;
-    
-    system("PAUSE");
+    cout << "\nPresione una tecla";
+    cin.ignore(1);
     return EXIT_SUCCESS;
 }
