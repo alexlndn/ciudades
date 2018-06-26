@@ -261,7 +261,13 @@ int costo(int matrizCostos[][MAX], int* cam, int tamano){
 void anchura(bitset<MAX> visitados, int* cam, int matrizCostos[][MAX], int referencia, int* optimo, int condicion,int ciudad, int destino, int *largo){
 	Cola* adyacentes = new Cola();
 	int tamano;
-	if(condicion==0){	//CONDICION: 0 = PARA VOLVER AL MISMO ORIGEN (DESTINO=ORIGEN), 1 = PARA IR A UN DESTINO DISTINTO DE ORIGEN
+	
+	//Condicion 0: origen = destino
+			// en la condicion 0 no se guarda como visitada la primer ciudad
+			// en la proxima iteracion entra en condicion 2
+	//Condicion 1: origen != destino
+	//Condicion 2: origen = destino, se guarda el visitado
+	if(condicion==0){	
 		tamano = MAX + 1;
 		condicion = 2;
 	}else if(condicion==1){
