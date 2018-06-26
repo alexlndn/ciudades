@@ -262,17 +262,15 @@ void anchura(bitset<MAX> visitados, int* cam, int matrizCostos[][MAX], int refer
 	Cola* adyacentes = new Cola();
 	int tamano;
 	if(condicion==0){	//CONDICION: 0 = PARA VOLVER AL MISMO ORIGEN (DESTINO=ORIGEN), 1 = PARA IR A UN DESTINO DISTINTO DE ORIGEN
-		tamano	= MAX +1;
-		condicion=2;
-	//	cout<<"entre 0";
+		tamano = MAX + 1;
+		condicion = 2;
 	}else if(condicion==1){
-			tamano	= MAX;
-			visitados[ciudad] = 1;
-		}else if(condicion==2){
-				tamano	= MAX+1;
-				visitados[ciudad] = 1;
-	//			cout<<"entre 2";
-			}
+		tamano = MAX;
+		visitados[ciudad] = 1;
+	}else if(condicion==2){
+		tamano = MAX + 1;
+		visitados[ciudad] = 1;
+	}
 	
 	int camino[tamano];
 	cam[referencia] = ciudad;
