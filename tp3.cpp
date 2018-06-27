@@ -1,4 +1,6 @@
 #include <iostream>
+#include <string>
+#include <sstream>
 #include <bitset>
 #include <cstdlib>
 #include <locale.h>
@@ -167,6 +169,19 @@ tipodato Cola::ultimo(void){
 	return this->cabeza();
 }
 
+bool duplicated(std::string& str){
+  	bool end = false;
+  	int length = str.length();
+  	for(unsigned int i = 0; i < length; i++){
+    	char currChar = str[i];
+    	for(unsigned int j = i+1; j < length; j++){
+      		if(currChar == str[j])
+        		end = true;
+    	}
+  	}
+  	return end;
+}
+
 int matrizCostos[MAX][MAX]={
 	INFI,	 150,	 180,	 210,	 340,	 310,	 280,	 600,
 	 150,	INFI,	 220,	 200,	 350,	 290,	 220,	 590,
@@ -208,29 +223,30 @@ int matrizCostos[MAX][MAX]={
 //}
 
 //
-void MultiLatina(Lista *M[MAX][MAX], Lista *MR[MAX][MAX]){
-    for(int i=0;i<MAX;i++){
-       for(int j=0;j<MAX;j++){
-		    M[i][j]->add(matrizCostos[i][j]);
-		    MR[i][j]->add(matrizCostos[i][j]);
-		    
-		    if(M[i][j]->cabeza() !=  INFI && MR[i][j]->cabeza() != INFI){ //Si son valores validos, realiza la multiplicacio latina
-		      MR[i][j]->concat(M[i][j]);
-		    }else{														//Si al menos uno no es válido se setea el valor "infinito"
-					MR[i][j]->set_valor(INFI);
-				}
-				
-		    M1[i][j] = MR [i][j];
-		    M1[i][j]->borrar();
-		
-		    if(MR[i][j]->cabeza() == M1[i][j]->ver_last()){
-		         MR[i][j]->set_valor(INFI);
-		    } else {
-		        MR[i][j]->concat(M1[i][j]);
-		    }
-    	}
-    }
-}
+// COMENTE ACA PAPUUU
+//void MultiLatina(Lista *M[MAX][MAX], Lista *MR[MAX][MAX]){
+//    for(int i=0;i<MAX;i++){
+//       for(int j=0;j<MAX;j++){
+//		    M[i][j]->add(matrizCostos[i][j]);
+//		    MR[i][j]->add(matrizCostos[i][j]);
+//		    
+//		    if(M[i][j]->cabeza() !=  INFI && MR[i][j]->cabeza() != INFI){ //Si son valores validos, realiza la multiplicacio latina
+//		      MR[i][j]->concat(M[i][j]);
+//		    }else{														//Si al menos uno no es válido se setea el valor "infinito"
+//					MR[i][j]->set_valor(INFI);
+//				}
+//				
+//		    M1[i][j] = MR [i][j];
+//		    M1[i][j]->borrar();
+//		
+//		    if(MR[i][j]->cabeza() == M1[i][j]->ver_last()){
+//		         MR[i][j]->set_valor(INFI);
+//		    } else {
+//		        MR[i][j]->concat(M1[i][j]);
+//		    }
+//    	}
+//    }
+//}
 
 //void BEA(Lista *visitado, int peso[MAX][MAX], Cola *cola) {
 //	
@@ -307,6 +323,29 @@ void anchura(bitset<MAX> visitados, int* cam, int referencia, int* optimo, int c
 	
 }
 
+void xl(Lista *l1, Lista *l2, Lista *res){
+	Lista* lista1 = new Lista();
+	lista1->concat(l1);
+	Lista* lista2 = new Lista();
+	lista2->concat(l2);
+	if(!lista1->esvacia() && !lista2->esvacia()){
+		int d1 = lista1->ver_last();
+		int d2 = lista2->ver_last();
+		ostringstream ss;
+		ss<<d1<<d2;
+		string final = ss.str();
+		if(!duplicated(final)){
+			int n = 0;
+			for(int i = 0 ; i < final.length() ; i++){
+				n = n*10 + (final.at(i) - 0);
+			}
+			res->add(n);
+		};
+		lista1->borrar_last();
+		lista2->borrar_last();
+		xl(lista1,lista2,res);	
+	}		
+}
 
 
 int main(){
