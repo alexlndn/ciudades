@@ -204,28 +204,36 @@ int costo(int matrizCostos[][MAX], int* cam, int tamano){
 
 void xl(Lista *l1, Lista *l2, Lista *res, int condicion){
 	if(!condicion){
-		Lista *aux= new Lista();
-		res=aux;
+		res= new Lista();
 	}
+	Lista* listaaux1 = new Lista();
+	listaaux1->concat(l1);
 	Lista* lista1 = new Lista();
-	lista1->concat(l1);
+	lista1->concat(listaaux1);
+	
+	Lista* listaaux2 = new Lista();
+	listaaux2->concat(l2);
 	Lista* lista2 = new Lista();
-	lista2->concat(l2);
+	lista2->concat(listaaux2);
 	if(!lista1->esvacia() && !lista2->esvacia()){
-		int d1 = lista1->ver_last();
-		int d2 = lista2->ver_last();
+		int d1 = lista1->cabeza();
+		int d2 = lista2->cabeza();
+		
 		ostringstream ss;
+		
 		ss<<d1<<d2;
 		string final = ss.str();
 		if(!duplicated(final)){
+			
 			int n = 0;
 			for(int i = 0 ; i < final.length() ; i++){
 				n = n*10 + (final.at(i) - 0);
 			}
 			res->add(n);
 		};
-		lista1->borrar_last();
-		lista2->borrar_last();
+		lista1->borrar();
+		lista2->borrar();
+			
 		xl(lista1,lista2,res, condicion);	
 	}		
 }
@@ -234,8 +242,8 @@ void MultiLatina(Lista *M1[MAX][MAX], Lista *M2[MAX][MAX], Lista *MR[MAX][MAX]){
     for(int i=0;i<MAX;i++){
        for(int j=0;j<MAX;j++){
        		if(matrizCostos[i][j]!=INFI){
-       			M1[i][j]->add(10*i+j);
-		    	M2[i][j]->add(j);
+       			M1[i][j]->add(10*(i+1)+j+1);
+		    	M2[i][j]->add(j+1);
 			}else{
 				M1[i][j]->add(INFI);
 		    	M2[i][j]->add(INFI);
@@ -248,6 +256,10 @@ void MultiLatina(Lista *M1[MAX][MAX], Lista *M2[MAX][MAX], Lista *MR[MAX][MAX]){
 		}
 	int condicion;
 	Lista *Maux[MAX][MAX];
+	for(int i=0;i<MAX;i++)
+		for(int j=0;j<MAX;j++){
+			Maux[i][j]=new Lista();	
+		}
 	for(int k=0;k<5;k++){
 		//FALTA UN CICLO WHILE QUE CONTENGA TODO DEPENDDIENDO DE R? R=N-1
 		for(int i=0;i<MAX;i++){
@@ -255,7 +267,7 @@ void MultiLatina(Lista *M1[MAX][MAX], Lista *M2[MAX][MAX], Lista *MR[MAX][MAX]){
     			condicion=0; //utilizaremos para saber cuando borrar todo o cuando agregarlo
     			for(int k=0;k<MAX;k++){
     				if(MR[i][k]->cabeza() != INFI && M1[k][j]->cabeza() != INFI){ //Si son valores validos, realiza la multiplicacio latina
-						//xl(MR[i][k],M1[k][j],Maux[i][j],condicion)	;	  //lleva a un metodo secundario que comprueba m1 y mj y lo multiplica (COMPROBANDO QUE NO SE REPITAN NUMEROS y lo guarda en Maux. Condicion 0 para reiniciar Maux, 1 agregar elementos
+						xl(MR[i][k],M1[k][j],Maux[i][j],condicion)	;	  //lleva a un metodo secundario que comprueba m1 y mj y lo multiplica (COMPROBANDO QUE NO SE REPITAN NUMEROS y lo guarda en Maux. Condicion 0 para reiniciar Maux, 1 agregar elementos
 						condicion=1;
 					}
 				}
@@ -283,7 +295,7 @@ void BuscarCaminoMasCortito(Lista *Mfinal[MAX][MAX], int origen, int destino, in
 		string stringnumero = numero.str();
 		for(int j=0;j<stringnumero.length();j++){
 			for(int k=0;k<MAX;k++){
-				Actual[k]=stringnumero.at(j)-'0';
+				Actual[k]=(stringnumero.at(j)-'0')-1;
 			}
 		}
 		if(costo(matrizCostos,Actual,MAX) < costo(matrizCostos,Optima,MAX)){
@@ -408,7 +420,7 @@ int main(){
     MultiLatina(M1, M2, MR);
     int prueba[MAX];
 	BuscarCaminoMasCortito(MR, 1, 2, prueba);
-	cout << costo(matrizCostos,prueba,8) << endl;
+	//cout << costo(matrizCostos,prueba,8) << endl;
 	//------------------------------ANCHURA-------------------------
 	anchura(visitados,cam,0,optimo,0,1,1,&largo);
 	for(int i=0;i<MAX+1;i++)
