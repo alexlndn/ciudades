@@ -187,29 +187,52 @@ int matrizCostos[MAX][MAX]={
 	 600,	 590,	 700,	 500,	 800,	 240,	 780,	INFI
 };
 
-void MultiLatina(Lista *M[MAX][MAX], Lista *MR[MAX][MAX]){
+void MultiLatina(Lista *M1[MAX][MAX], Lista *M2[MAX][MAX], Lista *MR[MAX][MAX]){
     for(int i=0;i<MAX;i++){
        for(int j=0;j<MAX;j++){
-		    M[i][j]->add(matrizCostos[i][j]);
-		    MR[i][j]->add(matrizCostos[i][j]);
-		    
-		    if(M[i][j]->cabeza() !=  INFI && MR[i][j]->cabeza() != INFI){ //Si son valores validos, realiza la multiplicacio latina
-		      MR[i][j]->concat(M[i][j]);
-		    }else{														//Si al menos uno no es válido se setea el valor "infinito"
-					MR[i][j]->set_valor(INFI);
-				}
-				
-		    M1[i][j] = MR [i][j];
-		    M1[i][j]->borrar();
-		
-		    if(MR[i][j]->cabeza() == M1[i][j]->ver_last()){
-		         MR[i][j]->set_valor(INFI);
-		    } else {
-		        MR[i][j]->concat(M1[i][j]);
-		    }
-    	}
-    }
+       		if(matrizCostos[i][j]!=INFI){
+       			M1[i][j]->add(10*i+j);
+		    	M2[i][j]->add(j);
+			} else{
+				M1[i][j]->add(INFI);
+		    	M2[i][j]->add(INFI);
+			}
+		}
+	}
+	MR[i][j]=M2[i][j];
+	for(int i=0;i<MAX;i++){
+		int condicion=0; //utilizaremos para saber cuando borrar todo o cuando agregarlo
+    	for(int j=0;j<MAX;j++){
+			if(MR[i][j]->cabeza() != INFI && MR[j][i]->cabeza() != INFI){ //Si son valores validos, realiza la multiplicacio latina
+		}
+	}
 }
+}
+
+//
+//void MultiLatina(Lista *M[MAX][MAX], Lista *MR[MAX][MAX]){
+//    for(int i=0;i<MAX;i++){
+//       for(int j=0;j<MAX;j++){
+//		    M[i][j]->add(matrizCostos[i][j]);
+//		    MR[i][j]->add(matrizCostos[i][j]);
+//		    
+//		    if(M[i][j]->cabeza() !=  INFI && MR[i][j]->cabeza() != INFI){ //Si son valores validos, realiza la multiplicacio latina
+//		      MR[i][j]->concat(M[i][j]);
+//		    }else{														//Si al menos uno no es válido se setea el valor "infinito"
+//					MR[i][j]->set_valor(INFI);
+//				}
+//				
+//		    M1[i][j] = MR [i][j];
+//		    M1[i][j]->borrar();
+//		
+//		    if(MR[i][j]->cabeza() == M1[i][j]->ver_last()){
+//		         MR[i][j]->set_valor(INFI);
+//		    } else {
+//		        MR[i][j]->concat(M1[i][j]);
+//		    }
+//    	}
+//    }
+//}
 
 //void BEA(Lista *visitado, int peso[MAX][MAX], Cola *cola) {
 //	
