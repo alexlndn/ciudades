@@ -1,6 +1,7 @@
 #include <iostream>
 #include <bitset>
 #include <cstdlib>
+#include <locale.h>
 #define INFI 9000
 #define MAX 8
 
@@ -207,29 +208,29 @@ int matrizCostos[MAX][MAX]={
 //}
 
 //
-//void MultiLatina(Lista *M[MAX][MAX], Lista *MR[MAX][MAX]){
-//    for(int i=0;i<MAX;i++){
-//       for(int j=0;j<MAX;j++){
-//		    M[i][j]->add(matrizCostos[i][j]);
-//		    MR[i][j]->add(matrizCostos[i][j]);
-//		    
-//		    if(M[i][j]->cabeza() !=  INFI && MR[i][j]->cabeza() != INFI){ //Si son valores validos, realiza la multiplicacio latina
-//		      MR[i][j]->concat(M[i][j]);
-//		    }else{														//Si al menos uno no es válido se setea el valor "infinito"
-//					MR[i][j]->set_valor(INFI);
-//				}
-//				
-//		    M1[i][j] = MR [i][j];
-//		    M1[i][j]->borrar();
-//		
-//		    if(MR[i][j]->cabeza() == M1[i][j]->ver_last()){
-//		         MR[i][j]->set_valor(INFI);
-//		    } else {
-//		        MR[i][j]->concat(M1[i][j]);
-//		    }
-//    	}
-//    }
-//}
+void MultiLatina(Lista *M[MAX][MAX], Lista *MR[MAX][MAX]){
+    for(int i=0;i<MAX;i++){
+       for(int j=0;j<MAX;j++){
+		    M[i][j]->add(matrizCostos[i][j]);
+		    MR[i][j]->add(matrizCostos[i][j]);
+		    
+		    if(M[i][j]->cabeza() !=  INFI && MR[i][j]->cabeza() != INFI){ //Si son valores validos, realiza la multiplicacio latina
+		      MR[i][j]->concat(M[i][j]);
+		    }else{														//Si al menos uno no es válido se setea el valor "infinito"
+					MR[i][j]->set_valor(INFI);
+				}
+				
+		    M1[i][j] = MR [i][j];
+		    M1[i][j]->borrar();
+		
+		    if(MR[i][j]->cabeza() == M1[i][j]->ver_last()){
+		         MR[i][j]->set_valor(INFI);
+		    } else {
+		        MR[i][j]->concat(M1[i][j]);
+		    }
+    	}
+    }
+}
 
 //void BEA(Lista *visitado, int peso[MAX][MAX], Cola *cola) {
 //	
@@ -255,12 +256,7 @@ int costo(int matrizCostos[][MAX], int* cam, int tamano){
     return cost;
 }
 
-//void BusquedaAmplitud(int origen)
-//	{
-//		if(origen==Destino)
-//			
-//	}
-void anchura(bitset<MAX> visitados, int* cam, int matrizCostos[][MAX], int referencia, int* optimo, int condicion,int ciudad, int destino, int *largo){
+void anchura(bitset<MAX> visitados, int* cam, int referencia, int* optimo, int condicion,int ciudad, int destino, int *largo){
 	Cola* adyacentes = new Cola();
 	int tamano;
 	
@@ -304,7 +300,7 @@ void anchura(bitset<MAX> visitados, int* cam, int matrizCostos[][MAX], int refer
 
 	while(!adyacentes->colavacia()){		 		//Recorre la cola
 		if(visitados.test(adyacentes->tope())==0) 	//Si el tope es 0, no esta visitado
-			anchura(visitados,camino,matrizCostos,referencia+1,optimo,condicion,adyacentes->desencolar(),destino,largo); // Llama recursivamente con el primer adyacente de la cola que no esta visitado
+			anchura(visitados,camino,referencia+1,optimo,condicion,adyacentes->desencolar(),destino,largo); // Llama recursivamente con el primer adyacente de la cola que no esta visitado
 		else										//Si ya esta visitado
 			adyacentes->desencolar();				//Desencola
 	}
@@ -314,6 +310,7 @@ void anchura(bitset<MAX> visitados, int* cam, int matrizCostos[][MAX], int refer
 
 
 int main(){
+	setlocale(LC_ALL, "");
 	Lista *M1[MAX][MAX], *MR[MAX][MAX], *M[MAX][MAX];
 	bitset<MAX> visitados;
 	
@@ -326,18 +323,18 @@ int main(){
     }
 	
 	//------------------------------ANCHURA-------------------------
-	anchura(visitados,cam,matrizCostos,0,optimo,0,1,1,&largo);
+	anchura(visitados,cam,0,optimo,0,1,1,&largo);
 	for(int i=0;i<MAX+1;i++)
 		cam[i]=0;
 	visitados.reset();
 	
-	anchura(visitados,cam,matrizCostos,0,optimo,1,2,1,&largo);
+	anchura(visitados,cam,0,optimo,1,2,1,&largo);
 	
 	for(int i=0;i<MAX+1;i++)
 		cam[i]=0;
 	visitados.reset();
 	
-	anchura(visitados,cam,matrizCostos,0,optimo,0,2,2,&largo);
+	anchura(visitados,cam,0,optimo,0,2,2,&largo);
 	
 	cout<<"Utilizando busqueda por amplitud llego a destino con el menor costo visitando " << largo << " ciudades en el siguiente orden: " <<endl<<" ";
                 for(int j=0;j<largo;j++){
@@ -345,7 +342,7 @@ int main(){
                 }
                 cout<<endl;
     cout<<"El costo del camino es: "<<costo(matrizCostos,optimo, largo)<<endl;
-    cout << "\nPresione una tecla";
+    cout << "\nPresioná una tecla";
     cin.ignore(1);
     return EXIT_SUCCESS;
 }
