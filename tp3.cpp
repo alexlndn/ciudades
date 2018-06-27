@@ -44,16 +44,8 @@ class Lista{
             
 
 };
-//--------------- Metodos de Lista ---------------
-class Pila:public Lista{
-    public:
-	    Pila(){Lista();};
-	    void apilar(tipodato x){add(x);};
-	    tipodato tope(){return cabeza();};
-	    tipodato desapilar(){return del();};
-	    bool pilavacia(){return esvacia();};
-};
 
+//--------------- Metodos de Lista ---------------
 int Lista::size(){
     if (this->esvacia()) return 0;
     return 1+this->resto()->size();
@@ -65,7 +57,6 @@ tipodato Lista::del(void){
     czo=czo->get_next();
     return aux->get_dato();
 }
-
 
 void Lista::add(tipodato d){
     Nodo *nuevo=new Nodo(d);
@@ -79,7 +70,7 @@ bool Lista::esvacia(void){
 
 tipodato Lista::cabeza(void){
   if(esvacia()){
-    cout<<" Error, Cabeza de lista vacia"<<endl;
+    cout<<" Error, Cabeza de lista vacia\n"<<endl;
     return 0;
   }
   return czo->get_dato();
@@ -90,21 +81,21 @@ Lista *Lista::resto(void){
 	return (l);
 }
 
-void Lista::concat(Lista *l1)
-{// le transfiere los datos de l1 a this
+// le transfiere los datos de l1 a this
+void Lista::concat(Lista *l1){
    if (!(l1->esvacia())){
       this->concat(l1->resto());
       this->add(l1->cabeza());
    }
 }
 
-void Lista::borrar(void)
-{ //borra el nodo cabeza
+//borra el nodo cabeza
+void Lista::borrar(void){
   if(esvacia()){
   } else {
-        Nodo *tmp=czo;
-        czo=czo->get_next();
-        delete tmp;
+    Nodo *tmp=czo;
+    czo=czo->get_next();
+    delete tmp;
   }
 }
 
@@ -120,7 +111,6 @@ void Lista::borrar_last(){
       	else this->resto()->borrar_last(); 
    }
 }
-
 
 int Lista::last(){
  if(!this->esvacia()){
@@ -187,34 +177,34 @@ int matrizCostos[MAX][MAX]={
 	 600,	 590,	 700,	 500,	 800,	 240,	 780,	INFI
 };
 
-void MultiLatina(Lista *M1[MAX][MAX], Lista *M2[MAX][MAX], Lista *MR[MAX][MAX]){
-    for(int i=0;i<MAX;i++){
-       for(int j=0;j<MAX;j++){
-       		if(matrizCostos[i][j]!=INFI){
-       			M1[i][j]->add(10*i+j);
-		    	M2[i][j]->add(j);
-			} else{
-				M1[i][j]->add(INFI);
-		    	M2[i][j]->add(INFI);
-			}
-		}
-	}
-	MR[i][j]=M2[i][j];
-	Lista *Maux[MAX][MAX];
-	//FALTA UN CICLO WILE QUE CONTENGA TODO DEPENDDIENDO DE R? R=N-1
-	for(int i=0;i<MAX;i++){
-    	for(int j=0;j<MAX;j++){
-    		int condicion=0; //utilizaremos para saber cuando borrar todo o cuando agregarlo
-    		for(int k=0;k<MAX;k++){
-    			if(MR[i][k]->cabeza() != INFI && M1[k][j]->cabeza() != INFI){ //Si son valores validos, realiza la multiplicacio latina
-				MultiLista(MR[i][k],M1[k][j],Maux[i][j],condicion)		  //lleva a un metodo secundario que comprueba m1 y mj y lo multiplica (COMPROBANDO QUE NO SE REPITAN NUMEROS y lo guarda en Maux. Condicion 0 para reiniciar Maux, 1 agregar elementos
-				condicion=1;
-				}
-			}
-			MR[i][j]=Maux[i][j];
-		}
-	}
-}
+//void MultiLatina(Lista *M1[MAX][MAX], Lista *M2[MAX][MAX], Lista *MR[MAX][MAX]){
+//    for(int i=0;i<MAX;i++){
+//       for(int j=0;j<MAX;j++){
+//       		if(matrizCostos[i][j]!=INFI){
+//       			M1[i][j]->add(10*i+j);
+//		    	M2[i][j]->add(j);
+//			}else{
+//				M1[i][j]->add(INFI);
+//		    	M2[i][j]->add(INFI);
+//			}
+//		}
+//	}
+//	MR[i][j]=M2[i][j];
+//	Lista *Maux[MAX][MAX];
+//	//FALTA UN CICLO WHILE QUE CONTENGA TODO DEPENDDIENDO DE R? R=N-1
+//	for(int i=0;i<MAX;i++){
+//    	for(int j=0;j<MAX;j++){
+//    		int condicion=0; //utilizaremos para saber cuando borrar todo o cuando agregarlo
+//    		for(int k=0;k<MAX;k++){
+//    			if(MR[i][k]->cabeza() != INFI && M1[k][j]->cabeza() != INFI){ //Si son valores validos, realiza la multiplicacio latina
+//					MultiLista(MR[i][k],M1[k][j],Maux[i][j],condicion)		  //lleva a un metodo secundario que comprueba m1 y mj y lo multiplica (COMPROBANDO QUE NO SE REPITAN NUMEROS y lo guarda en Maux. Condicion 0 para reiniciar Maux, 1 agregar elementos
+//					condicion=1;
+//				}
+//			}
+//			MR[i][j]=Maux[i][j];
+//		}
+//	}
+//}
 
 //
 //void MultiLatina(Lista *M[MAX][MAX], Lista *MR[MAX][MAX]){
@@ -299,7 +289,7 @@ void anchura(bitset<MAX> visitados, int* cam, int matrizCostos[][MAX], int refer
 
 	for(int i=0;i<MAX;i++){    //   Recorre los adyacentes a ciudad
 		if(matrizCostos[ciudad][i]!=INFI)		 //   Pregunta si hay camino						 
-			adyacentes->encolar(i);		 //	  Encola los adyacentesacentes
+			adyacentes->encolar(i);		 //	  Encola los adyacentes
 	}
 
 
@@ -350,8 +340,7 @@ int main(){
 	anchura(visitados,cam,matrizCostos,0,optimo,0,2,2,&largo);
 	
 	cout<<"Utilizando busqueda por amplitud llego a destino con el menor costo visitando " << largo << " ciudades en el siguiente orden: " <<endl<<" ";
-                for(int j=0;j<largo;j++)
-                {
+                for(int j=0;j<largo;j++){
                     cout<<" "<<optimo[j]<<" ";           // Muestra el camino
                 }
                 cout<<endl;
