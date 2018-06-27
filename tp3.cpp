@@ -200,13 +200,20 @@ void MultiLatina(Lista *M1[MAX][MAX], Lista *M2[MAX][MAX], Lista *MR[MAX][MAX]){
 		}
 	}
 	MR[i][j]=M2[i][j];
+	Lista *Maux[MAX][MAX];
+	//FALTA UN CICLO WILE QUE CONTENGA TODO DEPENDDIENDO DE R? R=N-1
 	for(int i=0;i<MAX;i++){
-		int condicion=0; //utilizaremos para saber cuando borrar todo o cuando agregarlo
     	for(int j=0;j<MAX;j++){
-			if(MR[i][j]->cabeza() != INFI && MR[j][i]->cabeza() != INFI){ //Si son valores validos, realiza la multiplicacio latina
+    		int condicion=0; //utilizaremos para saber cuando borrar todo o cuando agregarlo
+    		for(int k=0;k<MAX;k++){
+    			if(MR[i][k]->cabeza() != INFI && M1[k][j]->cabeza() != INFI){ //Si son valores validos, realiza la multiplicacio latina
+				MultiLista(MR[i][k],M1[k][j],Maux[i][j],condicion)		  //lleva a un metodo secundario que comprueba m1 y mj y lo multiplica (COMPROBANDO QUE NO SE REPITAN NUMEROS y lo guarda en Maux. Condicion 0 para reiniciar Maux, 1 agregar elementos
+				condicion=1;
+				}
+			}
+			MR[i][j]=Maux[i][j];
 		}
 	}
-}
 }
 
 //
