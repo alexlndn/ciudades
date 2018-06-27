@@ -234,8 +234,8 @@ void MultiLatina(Lista *M1[MAX][MAX], Lista *M2[MAX][MAX], Lista *MR[MAX][MAX]){
     for(int i=0;i<MAX;i++){
        for(int j=0;j<MAX;j++){
        		if(matrizCostos[i][j]!=INFI){
-       			M1[i][j]->add(10*i+j);
-		    	M2[i][j]->add(j);
+       			M1[i][j]->add(10*(i+1)+j+1);
+		    	M2[i][j]->add(j+1);
 			}else{
 				M1[i][j]->add(INFI);
 		    	M2[i][j]->add(INFI);
@@ -255,7 +255,7 @@ void MultiLatina(Lista *M1[MAX][MAX], Lista *M2[MAX][MAX], Lista *MR[MAX][MAX]){
     			condicion=0; //utilizaremos para saber cuando borrar todo o cuando agregarlo
     			for(int k=0;k<MAX;k++){
     				if(MR[i][k]->cabeza() != INFI && M1[k][j]->cabeza() != INFI){ //Si son valores validos, realiza la multiplicacio latina
-						//xl(MR[i][k],M1[k][j],Maux[i][j],condicion)	;	  //lleva a un metodo secundario que comprueba m1 y mj y lo multiplica (COMPROBANDO QUE NO SE REPITAN NUMEROS y lo guarda en Maux. Condicion 0 para reiniciar Maux, 1 agregar elementos
+						xl(MR[i][k],M1[k][j],Maux[i][j],condicion)	;	  //lleva a un metodo secundario que comprueba m1 y mj y lo multiplica (COMPROBANDO QUE NO SE REPITAN NUMEROS y lo guarda en Maux. Condicion 0 para reiniciar Maux, 1 agregar elementos
 						condicion=1;
 					}
 				}
@@ -263,7 +263,7 @@ void MultiLatina(Lista *M1[MAX][MAX], Lista *M2[MAX][MAX], Lista *MR[MAX][MAX]){
 		}
 		for(int i=0;i<MAX;i++)
 			for(int j=0;j<MAX;j++){
-				//MR[i][j]=Maux[i][j];
+				MR[i][j]=Maux[i][j];
 		}
 	}
 }
@@ -399,7 +399,7 @@ int main(){
     //-------------------------------------------------------------
     MultiLatina(M1, M2, MR);
     int prueba[MAX];
-	//BuscarCaminoMasCortito(MR, 1, 2, prueba);
+	BuscarCaminoMasCortito(MR, 1, 2, prueba);
 	
 	//------------------------------ANCHURA-------------------------
 	anchura(visitados,cam,0,optimo,0,1,1,&largo);
