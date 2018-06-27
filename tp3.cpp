@@ -389,6 +389,14 @@ int main(){
 	Lista *M1[MAX][MAX], *M2[MAX][MAX], *MR[MAX][MAX];
 	bitset<MAX> visitados;
 	
+	for(int i = 0 ; i < MAX ; i++){
+		for(int j = 0 ; j < MAX ; j++){
+			M1[i][j] = new Lista();
+			M2[i][j] = new Lista();
+			MR[i][j] = new Lista();
+		}
+	}
+	
 	int cam[MAX+1];
 	int optimo[MAX+1];
 	int largo= MAX+1;
@@ -399,8 +407,8 @@ int main(){
     //-------------------------------------------------------------
     MultiLatina(M1, M2, MR);
     int prueba[MAX];
-	//BuscarCaminoMasCortito(MR, 1, 2, prueba);
-	
+	BuscarCaminoMasCortito(MR, 1, 2, prueba);
+	cout << costo(matrizCostos,prueba,8) << endl;
 	//------------------------------ANCHURA-------------------------
 	anchura(visitados,cam,0,optimo,0,1,1,&largo);
 	for(int i=0;i<MAX+1;i++)
