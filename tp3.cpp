@@ -1,4 +1,6 @@
 #include <iostream>
+#include <string>
+#include <sstream>
 #include <bitset>
 #include <cstdlib>
 #include <locale.h>
@@ -168,6 +170,21 @@ tipodato Cola::ultimo(void){
 	return this->cabeza();
 }
 
+<<<<<<< HEAD
+=======
+bool duplicated(std::string& str){
+  	bool end = false;
+  	int length = str.length();
+  	for(unsigned int i = 0; i < length; i++){
+    	char currChar = str[i];
+    	for(unsigned int j = i+1; j < length; j++){
+      		if(currChar == str[j])
+        		end = true;
+    	}
+  	}
+  	return end;
+}
+>>>>>>> 5b3e8d44b0dd58d631e122e4fe3cbce4b0898fa7
 
 int matrizCostos[MAX][MAX]={
 	INFI,	 150,	 180,	 210,	 340,	 310,	 280,	 600,
@@ -337,6 +354,29 @@ void anchura(bitset<MAX> visitados, int* cam, int referencia, int* optimo, int c
 	
 }
 
+void xl(Lista *l1, Lista *l2, Lista *res){
+	Lista* lista1 = new Lista();
+	lista1->concat(l1);
+	Lista* lista2 = new Lista();
+	lista2->concat(l2);
+	if(!lista1->esvacia() && !lista2->esvacia()){
+		int d1 = lista1->ver_last();
+		int d2 = lista2->ver_last();
+		ostringstream ss;
+		ss<<d1<<d2;
+		string final = ss.str();
+		if(!duplicated(final)){
+			int n = 0;
+			for(int i = 0 ; i < final.length() ; i++){
+				n = n*10 + (final.at(i) - 0);
+			}
+			res->add(n);
+		};
+		lista1->borrar_last();
+		lista2->borrar_last();
+		xl(lista1,lista2,res);	
+	}		
+}
 
 
 int main(){
