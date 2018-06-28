@@ -10,7 +10,7 @@
 
 using namespace std;
 
-typedef long int tipodato;
+typedef long long int tipodato;
 //--------------- Clase Nodo ---------------
 class Nodo{
     protected:
@@ -141,10 +141,11 @@ void Lista::set_valor(tipodato a){
 
 string Lista::toPrint(string fin){
 	if(this->esvacia()){
-		return "- " + fin;
+		return "- " + fin + "";
 	}else{
 		ostringstream m;
 		m << this->cabeza();
+		m << " \n ";
 		m << this->resto()->toPrint("");
 		return m.str();
 	}
@@ -208,6 +209,29 @@ int matrizCostos[MAX][MAX]={
 	 600,	 590,	 700,	 500,	 800,	 240,	 780,	INFI
 };
 
+string Conversion(int a){
+	switch(a){
+		case 0:
+			return "Madrid";
+		case 1:
+			return "Barcelona";
+		case 2:
+			return "Roma";
+		case 3:
+			return "Paris";
+		case 4:
+			return "Londres";
+		case 5:
+			return "Berlin";
+		case 6:
+			return "Amsterdam";
+		case 7:
+			return "Moscu";
+		default:
+			return "";	
+	}
+}
+
 Lista *Maux[MAX][MAX];
 
 int costo(int matrizCostos[][MAX], int* cam, int tamano){
@@ -218,126 +242,143 @@ int costo(int matrizCostos[][MAX], int* cam, int tamano){
     return cost;
 }
 
-void xs(Lista *l1, Lista *l2, int condicion, int i, int j){
+void MultiplicacionCorta(Lista *l1, Lista *l2, int condicion, int i, int j){
 	if(!l1->esvacia()){
 		if(!condicion){
 			//delete Maux[i][j];
 			Maux[i][j]=new Lista();
 		}
-		Lista* listaaux1 = new Lista();
-		listaaux1->concat(l1);
+//		Lista* listaaux1 = new Lista();
+//		listaaux1->concat(l1);
 		Lista* lista1 = new Lista();
-		lista1->concat(listaaux1);
-		delete [] listaaux1;
+		lista1->concat(l1);
+		//delete [] listaaux1;
 	
 		if(!lista1->esvacia()){
-			int d1 = lista1->cabeza();
-			int d2 = l2->cabeza();
+			tipodato d1 = lista1->cabeza();
+			tipodato d2 = l2->cabeza();
 			ostringstream ss;
-			ss<<d1<<d2;
-			string final = ss.str();
-			if(!duplicated(final)){
-				int n = 0;
-				for(int k = 0 ; k < final.length() ; k++){
-					n = n*10 + (final.at(k) - '0');
+			ss<<d1;
+			ostringstream sd;
+			sd<<d2;
+			string final="";
+			string final1 = ss.str();
+			string final2 = sd.str();
+			if(final1.at(final1.length()-1)==final2.at(0)){
+				final1.erase(final1.length()-1,1);
+				final=final1+final2;
+				if(!duplicated(final)){
+					int n = 0;
+					for(int h = 0 ; h < final.length() ; h++){
+						n = n*10 + (final.at(h) - '0');
+					}
+					Maux[i][j]->add(n);
 				}
-				//cout<<final<<endl;
-				Maux[i][j]->add(n);
 			}
 		}
 		lista1->borrar();
-		xs(lista1,l2, condicion,i,j);	
+		MultiplicacionCorta(lista1,l2, condicion,i,j);	
 	}
 }
 
-void xl(Lista *l1, Lista *l2, Lista *res, int condicion){
+void MultiplicacionLarga(Lista *l1, Lista *l2, int condicion,int i,int j){
 	if(!l1->esvacia() && !l2->esvacia()){
-	if(!condicion){
-		res= new Lista();
-	}
-	Lista* listaaux1 = new Lista();
-	listaaux1->concat(l1);
-	Lista* lista1 = new Lista();
-	lista1->concat(listaaux1);
-	
-	Lista* listaaux2 = new Lista();
-	listaaux2->concat(l2);
-	Lista* lista2 = new Lista();
-	lista2->concat(listaaux2);
-	if(!lista1->esvacia() && !lista2->esvacia()){
-		int d1 = lista1->cabeza();
-		for(int j=0; j<lista2->size();j++){
-			int d2 = lista2->cabeza();
-			ostringstream ss;
-			ss<<d1<<d2;
-			string final = ss.str();
-			if(!duplicated(final)){
-				
-				int n = 0;
-				for(int i = 0 ; i < final.length() ; i++){
-					n = n*10 + (final.at(i) - 0);
-				}
-				res->add(n);
-			}
+		if(!condicion){
+			Maux[i][j]=new Lista();
 		}
-		lista1->borrar();
+		
+		Lista* lista1 = new Lista();
+		lista1->concat(l1);
+		
 		Lista* lista2 = new Lista();
-		lista2->concat(listaaux2);
-		xl(lista1,lista2,res, condicion);	
-	}
+		lista2->concat(l2);
+		if(!lista1->esvacia() && !lista2->esvacia()){
+			int d1 = lista1->cabeza();
+			for(int k=0; k<lista2->size();k++){
+				int d2 = lista2->cabeza();
+				ostringstream ss;
+				ss<<d1;
+				ostringstream sd;
+				sd<<d2;
+				string final="";
+				string final1 = ss.str();
+				string final2 = sd.str();
+				if(final1.at(final1.length()-1)==final2.at(0)){
+					final1.erase(final1.length()-1,1);
+					final=final1+final2;
+					if(!duplicated(final)){
+						int n = 0;
+						for(int h = 0 ; h < final.length() ; h++){
+							n = n*10 + (final.at(h) - '0');
+						}
+						Maux[i][j]->add(n);
+					}
+				}
+				lista2->borrar();
+			}
+			lista1->borrar();
+			Lista* lista2 = new Lista();
+			lista2->concat(l2);
+			MultiplicacionLarga(lista1,lista2, condicion,i,j);	
+		}
 	}
 }
 
 void MultiLatina(Lista *M1[MAX][MAX], Lista *M2[MAX][MAX], Lista *MR[MAX][MAX]){
-    for(int i=0;i<MAX;i++){
+    //Guardamos en M1 los caminos elementales de orden uno
+	for(int i=0;i<MAX;i++){
        for(int j=0;j<MAX;j++){
        		if(matrizCostos[i][j]!=INFI){
        			M1[i][j]->add(10*(i+1)+j+1);
-		    	M2[i][j]->add(j+1);
+       			M2[i][j]->add(j);
 			}else{
 				M1[i][j]->add(INFI);
-		    	M2[i][j]->add(INFI);
+				M2[i][j]->add(INFI);
 			}
 		}
 	}
 	
-	for(int i=0;i<MAX;i++)
+	//Se setea la matriz resultante de grado 1
+	for(int i=0;i<MAX;i++){
 		for(int j=0;j<MAX;j++){
 			MR[i][j]=M1[i][j];
 		}
-		
+	}
+	
 	int condicion;
-//	Lista *Maux[MAX][MAX];
-//	for(int i=0;i<MAX;i++)
-//		for(int j=0;j<MAX;j++){
-//			Maux[i][j]=new Lista();	
-//		}
-	for(int r=0;r<6;r++){
+	//calculamos la matriz de grado 2
+	for (int r = 1 ; r < MAX-1 ; r++){
 		for(int i=0;i<MAX;i++){
     		for(int j=0;j<MAX;j++){
     			condicion=0; //utilizaremos para saber cuando borrar todo o cuando agregarlo
     			for(int k=0;k<MAX;k++){
-    				if(MR[i][k]->cabeza() != INFI && M2[k][j]->cabeza() != INFI){ //Si son valores validos, realiza la multiplicacio latina
-						xs(MR[i][k],M2[k][j],condicion,i,j)	;	  //lleva a un metodo secundario que comprueba m1 y mj y lo multiplica (COMPROBANDO QUE NO SE REPITAN NUMEROS y lo guarda en Maux. Condicion 0 para reiniciar Maux, 1 agregar elementos
+    				if(MR[i][k]->cabeza() != INFI && M1[k][j]->cabeza() != INFI){ //Si son valores validos, realiza la multiplicacio latina
+						MultiplicacionCorta(MR[i][k],M1[k][j],condicion,i,j)	;	  //lleva a un metodo secundario que comprueba m1 y mj y lo multiplica (COMPROBANDO QUE NO SE REPITAN NUMEROS y lo guarda en Maux. Condicion 0 para reiniciar Maux, 1 agregar elementos
 						condicion=1;
 					}
 				}
 			}
 		}
-		for(int i=0;i<MAX;i++)
-			for(int j=0;j<MAX;j++){
-				if(Maux[i][j]->esvacia())
-					MR[i][j]->add(INFI);
-				else
-					MR[i][j]=Maux[i][j];
+		// Despues de realizar todos los calculos necesarios
+		// Seteamos la matriz resultante del nuevo grado
+		
+		for(int k=0;k<MAX;k++){
+			for(int x=0;x<MAX;x++){
+				if(Maux[k][x]->esvacia()){
+					MR[k][x]->set_valor(INFI);
+				}else{
+					MR[k][x]=Maux[k][x];
+				}
+			}
 		}
 	}
+
 }
+
 
 void BuscarCaminoMasCortito(Lista *Mfinal[MAX][MAX], int origen, int destino, int *Optima){
 	int Actual[MAX];
 	for(int i=0;i<MAX;i++){
-		Optima[i]=0;
 		Actual[i]=0;
 	}
 	Lista *A = new Lista();
@@ -348,16 +389,33 @@ void BuscarCaminoMasCortito(Lista *Mfinal[MAX][MAX], int origen, int destino, in
 		A->borrar();
 		string stringnumero = numero.str();
 		for(int j=0;j<stringnumero.length();j++){
-//			for(int k=0;k<MAX;k++){
 				Actual[j]=(stringnumero.at(j)-'0')-1;
-//			}
 		}
 		if(costo(matrizCostos,Actual,MAX) < costo(matrizCostos,Optima,MAX)){
 			for(int a=0;a<MAX;a++)
                 Optima[a]=Actual[a];
 		}
-	}	
+	}
+	Lista *B=new Lista();
+	B->concat(Mfinal[destino][origen]);	
+	while(!B->esvacia()){	
+		ostringstream numero;
+		numero<< B->cabeza();
+		B->borrar();
+		string stringnumero = numero.str();
+		int r=0;
+		for(int j=stringnumero.length()-1;j>=0;j--){
+				Actual[r]=(stringnumero.at(j)-'0')-1;
+				r++;
+		}
+		if(costo(matrizCostos,Actual,MAX) < costo(matrizCostos,Optima,MAX)){
+			for(int a=0;a<MAX;a++)
+                Optima[a]=Actual[a];
+		}
+	}
 }
+
+
 
 void anchura(bitset<MAX> visitados, int* cam, int referencia, int* optimo, int condicion,int ciudad, int destino, int *largo){
 	Cola* adyacentes = new Cola();
@@ -412,6 +470,10 @@ void anchura(bitset<MAX> visitados, int* cam, int referencia, int* optimo, int c
 
 int main(){
 	setlocale(LC_ALL, "");
+	cout << "*\t ALGORITMO DE RECORRIDO DE UN GRAFO\t*\n\n";
+	cout << "# POSIBLES PARTIDAS: " << Conversion(1) << " | " << Conversion(2) << endl;
+	cout << "# POSIBLES DESTINOS: " << Conversion(1) << " | " << Conversion(2) << endl << endl;
+	
 	Lista *M1[MAX][MAX], *M2[MAX][MAX], *MR[MAX][MAX];
 	bitset<MAX> visitados;
 	
@@ -437,18 +499,21 @@ int main(){
 		}
 	}
     //-------------------------------------------------------------
+    cout<<"ALGORITMO DE KAUFMANN y MALGRANGE:"<<endl;   
     MultiLatina(M1, M2, MR);
-    //cout<< MR[1][2]->cabeza();
-    int prueba[MAX];
-    //cout<< MR[4][3]->last();
-	BuscarCaminoMasCortito(MR, 1, 2, prueba);
-	cout << costo(matrizCostos, prueba ,8) << endl;
-	for(int j=0;j<8;j++){
-        cout<<" "<<prueba[j]<<" ";           // Muestra el camino
+    int CamHamiltoniano[MAX]={0,0,0,0,0,0,0,0};
+	BuscarCaminoMasCortito(MR, 1, 2, CamHamiltoniano);
+	cout<<"Llego a destino, con el menor costo, visitando todas las ciudades en el siguiente orden: " <<endl<<" ";
+	for(int j=0;j<MAX;j++){
+        cout <<Conversion(CamHamiltoniano[j]);
+		if(j != MAX-1){
+			cout << " --> ";
+		}
     }
-    cout<<"METODO AMPLITUD"<<endl;
+    cout << ". El costo total es de " << costo(matrizCostos, CamHamiltoniano ,MAX) << endl;
 	
 	//------------------------------ANCHURA-------------------------
+	cout<<endl<<"ALGORITMO DE BUSQUEDA EN AMPLITUD:"<<endl;
 	anchura(visitados,cam,0,optimo,0,1,1,&largo);
 	for(int i=0;i<MAX+1;i++)
 		cam[i]=0;
@@ -462,12 +527,14 @@ int main(){
 	
 	anchura(visitados,cam,0,optimo,0,2,2,&largo);
 	
-	cout<<"Utilizando busqueda por amplitud llego a destino con el menor costo visitando " << largo << " ciudades en el siguiente orden: " <<endl<<" ";
+	cout<<"Llego a destino, con el menor costo, visitando todas las ciudades en el siguiente orden: " <<endl<<" ";
                 for(int j=0;j<largo;j++){
-                    cout<<" "<<optimo[j]<<" ";           // Muestra el camino
+                    cout << Conversion(optimo[j]);
+                    if(j != largo-1){
+						cout << " --> ";
+					}
                 }
-                cout<<endl;
-    cout<<"El costo del camino es: "<<costo(matrizCostos,optimo, largo)<<endl;
+    cout << ". El costo total es de " << costo(matrizCostos,optimo, largo)<<endl;
     cout << "\nPresioná una tecla";
     cin.ignore(1);
     return EXIT_SUCCESS;
