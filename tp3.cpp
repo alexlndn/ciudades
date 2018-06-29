@@ -499,7 +499,7 @@ int main(){
 		}
 	}
     //-------------------------------------------------------------
-    cout<<"ALGORITMO DE KAUFMANN y MALGRANGE:"<<endl;   
+    cout<<"*\tALGORITMO DE KAUFMANN y MALGRANGE\t*\n"<<endl;   
     MultiLatina(M1, M2, MR);
     int CamHamiltoniano[MAX]={0,0,0,0,0,0,0,0};
 	BuscarCaminoMasCortito(MR, 1, 2, CamHamiltoniano);
@@ -513,12 +513,19 @@ int main(){
     cout << ". El costo total es de " << costo(matrizCostos, CamHamiltoniano ,MAX) << endl;
 	
 	//------------------------------ANCHURA-------------------------
-	cout<<endl<<"ALGORITMO DE BUSQUEDA EN AMPLITUD:"<<endl;
+	cout<<endl<<"*\tALGORITMO DE BUSQUEDA EN AMPLITUD\t*\n"<<endl;
 	anchura(visitados,cam,0,optimo,0,1,1,&largo);
 	for(int i=0;i<MAX+1;i++)
 		cam[i]=0;
 	visitados.reset();
-	
+	cout<<"Menor costo en ciclo en el siguiente orden: " <<endl<<" ";
+                for(int j=0;j<largo;j++){
+                    cout << Conversion(optimo[j]);
+                    if(j != largo-1){
+						cout << " --> ";
+					}
+                }
+    cout << ". El costo total es de " << costo(matrizCostos,optimo, largo)<<endl<<endl;
 	anchura(visitados,cam,0,optimo,1,1,2,&largo);
 	
 	for(int i=0;i<MAX+1;i++)
